@@ -5044,7 +5044,7 @@ def create_sub_robot(robot, first_joint, target_link):
     assert len(selected_joints) == len(get_movable_joints(sub_robot))
     return sub_robot, selected_joints, sub_target_link
 
-def multiple_sub_inverse_kinematics(robot, first_joint, target_link, target_pose, max_attempts=1, max_solutions=INF,
+def multiple_sub_inverse_kinematics(robot, first_joint, target_link, target_pose, max_attempts=INF, max_solutions=INF,
                                     max_time=INF, custom_limits={}, first_close=True, **kwargs):
     # TODO: gradient descent using collision_info
     start_time = time.time()

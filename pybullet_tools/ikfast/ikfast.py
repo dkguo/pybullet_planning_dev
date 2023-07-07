@@ -195,11 +195,7 @@ def pybullet_inverse_kinematics(robot, ikfast_info, tool_link, world_from_target
     free_joints = [joint for joint in ik_joints if joint not in fixed_joints]
     assert free_joints
     first_joint = free_joints[0]
-    # conf = sub_inverse_kinematics(robot, first_joint, tool_link, world_from_target, **kwargs)
-    # solutions = [] if conf is None else [conf]
-    # TODO: sample multiple solutions and return
-    solutions = multiple_sub_inverse_kinematics(robot, first_joint, tool_link, world_from_target,
-                                                max_attempts=1, first_close=True, **kwargs)
+    solutions = multiple_sub_inverse_kinematics(robot, first_joint, tool_link, world_from_target, **kwargs)
     for solution in solutions: # TODO: sort by distance
         set_configuration(robot, solution)
         yield get_joint_positions(robot, ik_joints)
