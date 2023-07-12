@@ -1,19 +1,22 @@
 import math
 import os.path
+import time
 
 import numpy as np
 from tracikpy import TracIKSolver
 
-from pybullet_tools.utils import Pose, multiply, invert, tform_from_pose, get_model_info, BASE_LINK, \
+import pybullet_planning as pp
+
+from .utils import Pose, multiply, invert, tform_from_pose, get_model_info, BASE_LINK, \
     get_link_name, link_from_name, get_joint_name, joint_from_name, parent_link_from_joint, joints_from_names, \
     links_from_names, get_link_pose, draw_pose, set_joint_positions, get_joint_positions, get_joint_limits, \
-    CIRCULAR_LIMITS, get_custom_limits
+    CIRCULAR_LIMITS, get_custom_limits, INF, elapsed_time
 
 
 class IKSolver(object):
     def __init__(self, body, tool_link, first_joint=None, tool_offset=Pose(), custom_limits={},
                  seed=None, max_time=5e-3, error=1e-5): #, **kwargs):
-        self.tool_link = link_from_name(body, tool_link)
+        self.tool_link = tool_link
         if first_joint is None:
             self.base_link = BASE_LINK
         else:
@@ -24,7 +27,7 @@ class IKSolver(object):
         # print([get_joint_name(body, joint) for joint in movable_joints])
 
         self.body = body
-        urdf_info = get_model_info(body)
+        urdf_info = pp.get_model_info(body)
         self.urdf_path = os.path.abspath(urdf_info.path)
         self.ik_solver = TracIKSolver(
             urdf_file=self.urdf_path,
